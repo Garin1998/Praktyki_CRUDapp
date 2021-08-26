@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "spring.rabbitmq.request-queue.name",
+      "type": "java.lang.String",
+      "description": "Request queue name for Users repository."
+  }
+] }
