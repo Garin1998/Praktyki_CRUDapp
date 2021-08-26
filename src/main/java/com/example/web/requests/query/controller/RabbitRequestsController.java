@@ -17,7 +17,7 @@ import java.util.UUID;
  * @since JDK 11
  */
 @RestController
-@RequestMapping("/ampq")
+@RequestMapping("/amqp")
 public class RabbitRequestsController {
     public final RabbitRequestHandler rabbitRequestHandler;
 
