@@ -51,12 +51,12 @@ public interface RabbitRequestHandler {
 
     /**
      * Send {@link UUID UUID} of request and check realisation status. It's an asynchronous reply method for future.
-     * @param requestUUID UUID of sent request to queue as correlation ID.
+     * @param correlationId UUID of sent request to queue as correlation ID.
      * @return Body of {@link Message Message} with realization status as String
      * @throws ExecutionException Exception thrown when attempting to retrieve the result of a task that aborted by throwing an exception
      * @throws InterruptedException Thrown when a thread is waiting, sleeping, or otherwise occupied, and the thread is interrupted, either before or during the activity.
      * @see ExecutionException
      * @see InterruptedException
      */
-    String getRespondMessage(UUID requestUUID) throws ExecutionException, InterruptedException;
+    String getRespondMessage(UUID correlationId) throws ExecutionException, InterruptedException;
 }

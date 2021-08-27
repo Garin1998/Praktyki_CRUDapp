@@ -89,16 +89,20 @@ public class BaseRabbitRequestHandler implements RabbitRequestHandler {
      * {@inheritDoc}
      */
     @Override
-    public String getRespondMessage(UUID requestUUID) throws ExecutionException, InterruptedException {
-        if(!responses.containsKey(requestUUID)) {
+    public String getRespondMessage(UUID correlationId) throws ExecutionException, InterruptedException {
+        if(!responses.containsKey(correlationId)) {
             return "Your request doesn't exist in queue";
         }
-        else if(responses.get(requestUUID).get().getBody() != null) {
-            Message message = responses.get(requestUUID).get();
+        else if(isRequestDone(correlationId)) {
+            Message message = responses.get(correlationId).get();
             return new String(Objects.requireNonNull(message).getBody(), StandardCharsets.UTF_8);
         }
         else {
             return "Your request still in queue. Check later";
         }
+    }
+
+    private boolean isRequestDone(UUID correlationId) {
+        return responses.get(correlationId).isDone();
     }
 }
