@@ -16,6 +16,9 @@ public class UsersCRUDAspect {
 
     private static final Logger logger = Logger.getLogger(UsersCRUDAspect.class.getName());
 
+    /** Following is the definition for a PointCut to select
+     *  all the methods available in UsersRepositoryHandler, which is in com.example.web.jpa package
+     */
     @Pointcut("within(com.example.web.jpa..*) && execution(* com.example.web.jpa.handler.UsersRepositoryHandler.*(..))")
     public void usersRepositoryClassMethods() {
     }
