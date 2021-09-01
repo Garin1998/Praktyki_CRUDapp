@@ -1,7 +1,10 @@
 package com.example.web.jpa.repositories;
 
 import com.example.web.domain.models.Users;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.UUID;
 
 /**
@@ -10,5 +13,7 @@ import java.util.UUID;
  * @version 1.0
  * @since JDK 11
  */
-public interface UsersRepository extends CrudRepository<Users, UUID> {
+
+@Repository
+public interface UsersRepository extends JpaRepository<Users, UUID> {
 }

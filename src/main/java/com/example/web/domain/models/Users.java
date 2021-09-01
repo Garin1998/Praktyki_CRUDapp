@@ -1,16 +1,16 @@
 package com.example.web.domain.models;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -29,6 +29,8 @@ public class Users {
     @Id
     @Column(name = "uuid")
     @NotNull(message = "Please provide a UUID.")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator( name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID userUUID;
 
     @Column(name = "name")
@@ -41,8 +43,7 @@ public class Users {
     private String userEmail;
 
     @Column(name = "register_date")
-    @NotNull(message = "Please provide a date.")
-    @FutureOrPresent(message = "not from present nor future")
+    @CreationTimestamp
     private LocalDate userRegisterDate;
 
     @Override

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 
 import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 /**
@@ -65,8 +66,8 @@ public class RabbitRequestsListener {
         try {
             usersRepositoryHandler.saveUserInDB(userBodyToCreate);
         }
-        catch(UserIdMismatchException e) {
-            return "User " + userBodyToCreate.getUserUUID() + " has been unable to create";
+        catch(Exception e) {
+            return exceptionPrinter(e, providedMessage.getMessageProperties().getType(), userBodyToCreate.getUserUUID());
         }
 
         return "User " + userBodyToCreate.getUserUUID() + " created successfully";
@@ -87,8 +88,8 @@ public class RabbitRequestsListener {
                     UUID.fromString(providedUUIDAsString)
             );
         }
-        catch(UserIdMismatchException e) {
-            return "User " + providedUUIDAsString + " has been unable to update";
+        catch(Exception e) {
+            return exceptionPrinter(e, providedMessage.getMessageProperties().getType(), userBodyToUpdate.getUserUUID());
         }
 
         return "User " + providedUUIDAsString + " has been updated successfully";
@@ -108,8 +109,23 @@ public class RabbitRequestsListener {
             );
         }
         catch(UserIdMismatchException e) {
-            return "User " + providedUUIDAsString + " has been unable to delete";
+            return exceptionPrinter(e, providedMessage.getMessageProperties().getType(), UUID.fromString(providedUUIDAsString));
         }
         return "User " + providedUUIDAsString + " has been deleted successfully";
+    }
+
+
+    /**
+     * This method return status with occurred exception as response.
+     * @param occurredException Object of occurred exception.
+     * @param requestMethod Name of method, which is requested (CREATE, UPDATE, DELETE).
+     * @param providedUserUUID UUID of user from database.
+     * @return Response status with occurred exception as String.
+     */
+    private String exceptionPrinter(Exception occurredException, String requestMethod, UUID providedUserUUID) {
+        StringJoiner joinExceptionValues = new StringJoiner(",\n");
+        joinExceptionValues.add("User " + providedUserUUID + " has been unable to " + requestMethod);
+        joinExceptionValues.add("Reason: " + occurredException.getMessage());
+        return joinExceptionValues.toString();
     }
 }

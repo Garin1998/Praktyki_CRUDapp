@@ -1,6 +1,7 @@
 package com.example.web.requests.query.handler;
 
 import com.example.web.domain.models.Users;
+import com.example.web.domain.models.UsersRequestBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.SneakyThrows;
 import org.springframework.amqp.core.Message;
@@ -30,7 +31,7 @@ public interface RabbitRequestHandler {
      * @return Request's CorrelationID.
      */
     @SneakyThrows(JsonProcessingException.class)
-    String createUserRequest(Users userBody);
+    String createUserRequest(UsersRequestBody userBody);
 
     /**
      * Send a {@link Message Message} to queue with PUT HTTP request.
@@ -39,7 +40,7 @@ public interface RabbitRequestHandler {
      * @return Request's CorrelationID.
      */
     @SneakyThrows(JsonProcessingException.class)
-    String updateUserRequest(Users userBody, UUID userUUID);
+    String updateUserRequest(UsersRequestBody userBody, UUID userUUID);
 
     /**
      * Send a {@link Message Message} without body to queue with DELETE HTTP request.

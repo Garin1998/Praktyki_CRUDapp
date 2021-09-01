@@ -33,7 +33,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     })
     public ResponseEntity<Object> handleBadRequest(
             Exception ex, WebRequest request) {
-        return handleExceptionInternal(ex, "Provided User UUID doesn't match with database or is duplicate",
+        return handleExceptionInternal(ex, ex.getMessage(),
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 

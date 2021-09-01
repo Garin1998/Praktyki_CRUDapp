@@ -2,6 +2,7 @@ package com.example.web.jpa.handler;
 
 import com.example.web.domain.exceptions.UserIdMismatchException;
 import com.example.web.domain.models.Users;
+import org.springframework.data.domain.Page;
 
 import java.util.UUID;
 
@@ -14,10 +15,11 @@ import java.util.UUID;
 public interface UsersRepositoryHandler {
 
     /**
-     * Find all user in database
-     * @return Body of founded users in database as object of {@link Users#Users class}
+     * Find all user in database and sort them by name, also page them with 5 entries per each page.
+     * @param numberOfPage Number of page, which we want to print.
+     * @return Iterable object with all founded users per provided page
      */
-    Iterable<Users> findAllUsersInDB();
+    Iterable<Users> findAllUsersInDB(String numberOfPage);
 
     /**
      * Find user in database with provided UUID

@@ -27,7 +27,7 @@ spring:
       name: cud.in.queue.requests
     listener:
       simple:
-        default-requeue-rejected: true
+        default-requeue-rejected: false
 
 management:
   endpoints:

@@ -3,7 +3,10 @@ package com.example.web.jpa.handler;
 import com.example.web.domain.exceptions.UserIdMismatchException;
 import com.example.web.domain.models.Users;
 import com.example.web.jpa.repositories.UsersRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.UUID;
@@ -15,7 +18,7 @@ import java.util.UUID;
  * @version 1.0
  * @since JDK 11
  */
-@Repository
+@Service
 public class BaseUsersRepositoryHandler implements UsersRepositoryHandler {
     private final UsersRepository usersRepository;
 
@@ -26,8 +29,14 @@ public class BaseUsersRepositoryHandler implements UsersRepositoryHandler {
     /**
      * {@inheritDoc}
      */
-    public Iterable<Users> findAllUsersInDB() {
-        return usersRepository.findAll();
+    @Override
+    public Iterable<Users> findAllUsersInDB(String numberOfPage) {
+        Pageable selectedPageSortedByName = PageRequest.of(
+                Integer.parseInt(numberOfPage),
+                5,
+                Sort.by("userName")
+        );
+        return usersRepository.findAll(selectedPageSortedByName).getContent();
     }
 
 
@@ -44,10 +53,7 @@ public class BaseUsersRepositoryHandler implements UsersRepositoryHandler {
      */
     @Override
     public Users saveUserInDB(Users userBody) throws UserIdMismatchException {
-        if(usersRepository.findById(userBody.getUserUUID()).isEmpty()) {
-           return usersRepository.save(userBody);
-        }
-        throw new UserIdMismatchException();
+        return usersRepository.save(userBody);
     }
 
     /**
@@ -55,8 +61,10 @@ public class BaseUsersRepositoryHandler implements UsersRepositoryHandler {
      */
     @Override
     public Users updateUserInDB(@Valid Users userBody, UUID userUUID) {
-        usersRepository.findById(userUUID).orElseThrow(UserIdMismatchException::new);
-        return usersRepository.save(userBody);
+        Users userBodyToUpdate = usersRepository.findById(userUUID).orElseThrow(UserIdMismatchException::new);
+        userBodyToUpdate.setUserName(userBody.getUserName());
+        userBodyToUpdate.setUserEmail(userBody.getUserEmail());
+        return usersRepository.save(userBodyToUpdate);
     }
 
     /**

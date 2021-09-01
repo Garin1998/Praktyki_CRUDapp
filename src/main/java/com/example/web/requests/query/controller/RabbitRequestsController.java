@@ -1,6 +1,7 @@
 package com.example.web.requests.query.controller;
 
 import com.example.web.domain.models.Users;
+import com.example.web.domain.models.UsersRequestBody;
 import com.example.web.requests.query.handler.RabbitRequestHandler;
 import lombok.SneakyThrows;
 import org.springframework.amqp.core.Message;
@@ -34,7 +35,7 @@ public class RabbitRequestsController {
     @SneakyThrows
     @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String sendCreateRequestToQuery(@Valid @RequestBody Users userBody) {
+    public String sendCreateRequestToQuery(@Valid @RequestBody UsersRequestBody userBody) {
         return rabbitRequestHandler.createUserRequest(userBody);
     }
 
@@ -48,7 +49,7 @@ public class RabbitRequestsController {
     @SneakyThrows
     @PutMapping("/{userUUID}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String sendUpdateRequestToQuery(@Valid @RequestBody Users userBody, @PathVariable UUID userUUID) {
+    public String sendUpdateRequestToQuery(@Valid @RequestBody UsersRequestBody userBody, @PathVariable UUID userUUID) {
         return rabbitRequestHandler.updateUserRequest(userBody, userUUID);
     }
 

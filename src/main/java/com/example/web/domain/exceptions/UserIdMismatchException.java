@@ -4,4 +4,9 @@ public class UserIdMismatchException extends RuntimeException {
     public UserIdMismatchException() {
         super();
     }
+
+    @Override
+    public String getMessage() {
+        return "Provided UUID doesn't match with existed user";
+    }
 }

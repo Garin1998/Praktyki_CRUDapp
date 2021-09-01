@@ -1,6 +1,6 @@
 package com.example.web.requests.query.handler;
 
-import com.example.web.domain.models.Users;
+import com.example.web.domain.models.UsersRequestBody;
 import com.example.web.requests.query.config.RabbitMQConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,7 +41,7 @@ public class BaseRabbitRequestHandler implements RabbitRequestHandler {
      * {@inheritDoc}
      */
     @Override
-    public String createUserRequest(Users userBody) {
+    public String createUserRequest(UsersRequestBody userBody) {
         Message message = MessageBuilder
                 .withBody(userBody.toString().getBytes())
                 .setContentType(MessageProperties.CONTENT_TYPE_JSON)
@@ -57,7 +57,7 @@ public class BaseRabbitRequestHandler implements RabbitRequestHandler {
      * {@inheritDoc}
      */
     @Override
-    public String updateUserRequest(Users userBody, UUID userUUID) {
+    public String updateUserRequest(UsersRequestBody userBody, UUID userUUID) {
         Message message = MessageBuilder
                 .withBody(userBody.toString().getBytes())
                 .setContentType(MessageProperties.CONTENT_TYPE_JSON)

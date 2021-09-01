@@ -5,8 +5,11 @@ import com.example.web.jpa.handler.UsersRepositoryHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.UUID;
 
 
@@ -26,16 +29,23 @@ public class UsersRepositoryController {
         this.usersRepositoryHandler = usersRepositoryHandler;
     }
 
+    /**
+     * Redirect from default path /users to /users/all/0.
+     * @return representation of Model and View in SpringMVC
+     */
+    @GetMapping("/")
+    public ModelAndView redirectToFirstPage() {
+        return new ModelAndView("redirect:" + "all/0");
+    }
 
     /**
      * Handle HTTP request method GET on default path defined in class.
      * @return Body of founded users in database as object of {@link Users#Users class}
      * @see UsersRepositoryHandler
      */
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Iterable<Users> findAll() {
-        return usersRepositoryHandler.findAllUsersInDB();
+    @GetMapping("/all/{numberOfPage}")
+    public Iterable<Users> findAll(@PathVariable String numberOfPage) {
+        return usersRepositoryHandler.findAllUsersInDB(numberOfPage);
     }
 
     /**
@@ -45,7 +55,6 @@ public class UsersRepositoryController {
      * @see UsersRepositoryHandler
      */
     @GetMapping("/{userUUID}")
-    @ResponseStatus(HttpStatus.OK)
     public Users findByUUID(@PathVariable UUID userUUID) {
         return usersRepositoryHandler.findUserByUUID(userUUID);
     }
@@ -70,7 +79,6 @@ public class UsersRepositoryController {
      * @see UsersRepositoryHandler
      */
     @PutMapping("/{userUUID}")
-    @ResponseStatus(HttpStatus.OK)
     public Users updateUser(@Valid @RequestBody Users userBody, @PathVariable UUID userUUID) {
         return usersRepositoryHandler.updateUserInDB(userBody,userUUID);
     }
@@ -82,6 +90,7 @@ public class UsersRepositoryController {
      * @see UsersRepositoryHandler
      */
     @DeleteMapping("/{userUUID}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Users> deleteUser(@PathVariable UUID userUUID) {
         usersRepositoryHandler.removeUserFromDB(userUUID);
         return ResponseEntity.noContent().build();
